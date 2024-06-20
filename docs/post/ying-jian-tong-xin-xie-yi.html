@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html data-color-mode="light" data-dark-theme="dark" data-light-theme="light" lang="zh-CN">
+<head>
+    <meta content="text/html; charset=utf-8" http-equiv="content-type" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link href="//cdn.staticfile.net/Primer/21.0.7/primer.css" rel="stylesheet" />
+    <link rel="icon" href="https://github.githubassets.com/favicons/favicon.svg"><script>
+        let theme = localStorage.getItem("meek_theme") || "light";
+        document.documentElement.setAttribute("data-color-mode", theme);
+    </script>
+<meta name="description" content="在嵌入式系统和电子通信中，理解各种通信协议和接口的原理、特点及其应用场景非常重要。">
+<meta property="og:title" content="硬件通信协议">
+<meta property="og:description" content="在嵌入式系统和电子通信中，理解各种通信协议和接口的原理、特点及其应用场景非常重要。">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://freelxw.github.io/tech-study.github.io/post/ying-jian-tong-xin-xie-yi.html">
+<meta property="og:image" content="https://github.githubassets.com/favicons/favicon.svg">
+<title>硬件通信协议</title>
+
+
+</head>
+<style>
+body{box-sizing: border-box;min-width: 200px;max-width: 900px;margin: 20px auto;padding: 45px;font-size: 16px;font-family: sans-serif;line-height: 1.25;}
+#header{display:flex;padding-bottom:8px;border-bottom: 1px solid var(--borderColor-muted, var(--color-border-muted));margin-bottom: 16px;}
+#footer {margin-top:64px; text-align: center;font-size: small;}
+
+</style>
+
+<style>
+.postTitle{margin: auto 0;font-size:40px;font-weight:bold;}
+.title-right{display:flex;margin:auto 0 0 auto;}
+.title-right .circle{padding: 14px 16px;margin-right:8px;}
+#postBody{border-bottom: 1px solid var(--color-border-default);padding-bottom:36px;}
+#postBody hr{height:2px;}
+#cmButton{height:48px;margin-top:48px;}
+#comments{margin-top:64px;}
+.g-emoji{font-size:24px;}
+@media (max-width: 600px) {
+    body {padding: 8px;}
+    .postTitle{font-size:24px;}
+}
+</style>
+
+
+
+
+<body>
+    <div id="header">
+<h1 class="postTitle">硬件通信协议</h1>
+<div class="title-right">
+    <a href="https://freelxw.github.io/tech-study.github.io" id="buttonHome" class="btn btn-invisible circle" title="首页">
+        <svg class="octicon" width="16" height="16">
+            <path id="pathHome" fill-rule="evenodd"></path>
+        </svg>
+    </a>
+    
+    <a href="https://github.com/freelxw/tech-study.github.io/issues/12" target="_blank" class="btn btn-invisible circle" title="Issue">
+        <svg class="octicon" width="16" height="16">
+            <path id="pathIssue" fill-rule="evenodd"></path>
+        </svg>
+    </a>
+    
+
+    <a class="btn btn-invisible circle" onclick="modeSwitch();" title="切换主题">
+        <svg class="octicon" width="16" height="16" >
+            <path id="themeSwitch" fill-rule="evenodd"></path>
+        </svg>
+    </a>
+
+</div>
+</div>
+    <div id="content">
+<div class="markdown-body" id="postBody"><p>在嵌入式系统和电子通信中，理解各种通信协议和接口的原理、特点及其应用场景非常重要。以下是对I²C、SPI、UART、USART、RS-485、RS-232、USB、CAN、TTL等的详细解释，包括它们的原理、特点、应用场景以及相互之间的关系。</p>
+<h3>1. I²C（Inter-Integrated Circuit）</h3>
+<h4><strong>原理</strong></h4>
+<p>I²C是一种多主从、双线串行通信总线。它使用两根线：SDA（数据线）和SCL（时钟线）。I²C通信通过主设备生成的时钟信号进行同步，数据可以在主设备和从设备之间双向传输。</p>
+<h4><strong>特点</strong></h4>
+<ul>
+<li><strong>双线制</strong>：仅需要两根信号线。</li>
+<li><strong>多主多从</strong>：允许多个主设备和多个从设备共用总线。</li>
+<li><strong>地址机制</strong>：通过7位或10位地址选择从设备。</li>
+<li><strong>支持应答</strong>：每个字节传输完成后，从设备会进行应答。</li>
+<li><strong>速度</strong>：标准模式（100 kbps）、快速模式（400 kbps）、高速模式（3.4 Mbps）等。</li>
+</ul>
+<h4><strong>应用场景</strong></h4>
+<ul>
+<li>用于低速、低成本设备，如传感器、存储器、显示器、时钟等。</li>
+<li>嵌入式系统中用于芯片间通信。</li>
+</ul>
+<h3>2. SPI（Serial Peripheral Interface）</h3>
+<h4><strong>原理</strong></h4>
+<p>SPI是一种全双工、同步串行通信协议。通常需要四根线：MOSI（主输出从输入）、MISO（主输入从输出）、SCLK（时钟线）、SS（从设备选择）。</p>
+<h4><strong>特点</strong></h4>
+<ul>
+<li><strong>全双工通信</strong>：数据可以同时在两个方向传输。</li>
+<li><strong>主从架构</strong>：主设备控制时钟，数据同步传输。</li>
+<li><strong>高速度</strong>：通常可达数十Mbps。</li>
+<li><strong>简单协议</strong>：没有复杂的握手信号，传输速度快。</li>
+</ul>
+<h4><strong>应用场景</strong></h4>
+<ul>
+<li>高速数据传输，如音频、视频数据。</li>
+<li>通常用于传感器、SD卡、显示屏和其他高速外围设备。</li>
+</ul>
+<h3>3. UART（Universal Asynchronous Receiver-Transmitter）</h3>
+<h4><strong>原理</strong></h4>
+<p>UART是一种异步串行通信协议，用于点对点通信。它不需要时钟线，而是通过波特率匹配进行同步。</p>
+<h4><strong>特点</strong></h4>
+<ul>
+<li><strong>异步通信</strong>：没有时钟信号，依靠预设波特率同步。</li>
+<li><strong>简单</strong>：数据通过一根发送线和一根接收线传输。</li>
+<li><strong>常见波特率</strong>：9600、115200等。</li>
+</ul>
+<h4><strong>应用场景</strong></h4>
+<ul>
+<li>串口通信，如计算机的RS-232端口。</li>
+<li>嵌入式系统的调试接口和低速数据通信。</li>
+</ul>
+<h3>4. USART（Universal Synchronous/Asynchronous Receiver-Transmitter）</h3>
+<h4><strong>原理</strong></h4>
+<p>USART支持同步和异步两种模式，集成了UART的功能，且可以与外部时钟同步通信。</p>
+<h4><strong>特点</strong></h4>
+<ul>
+<li><strong>双模式</strong>：既可以异步，也可以同步通信。</li>
+<li><strong>灵活性</strong>：通过选择同步或异步模式适应不同的应用场景。</li>
+</ul>
+<h4><strong>应用场景</strong></h4>
+<ul>
+<li>用于需要兼顾同步和异步通信的系统中。</li>
+<li>通常在高性能通信需求中使用。</li>
+</ul>
+<h3>5. RS-485</h3>
+<h4><strong>原理</strong></h4>
+<p>RS-485是一种差分通信标准，适合长距离、多点通信。使用差分对（A、B线）传输信号，抗干扰能力强。</p>
+<h4><strong>特点</strong></h4>
+<ul>
+<li><strong>长距离通信</strong>：可达1200米。</li>
+<li><strong>多点通信</strong>：支持多达32个设备连接在同一总线上。</li>
+<li><strong>抗干扰</strong>：差分信号对噪声敏感性低。</li>
+</ul>
+<h4><strong>应用场景</strong></h4>
+<ul>
+<li>工业自动化和控制系统。</li>
+<li>远程数据采集系统。</li>
+</ul>
+<h3>6. RS-232</h3>
+<h4><strong>原理</strong></h4>
+<p>RS-232是一种点对点的串行通信标准，通常用于短距离通信。使用单端信号（Tx、Rx等）传输数据。</p>
+<h4><strong>特点</strong></h4>
+<ul>
+<li><strong>短距离</strong>：典型距离15米以内。</li>
+<li><strong>低速</strong>：通常不超过115.2 kbps。</li>
+<li><strong>简单</strong>：适合简单的点对点通信。</li>
+</ul>
+<h4><strong>应用场景</strong></h4>
+<ul>
+<li>计算机与外设之间的通信，如调制解调器、打印机。</li>
+<li>设备的调试接口。</li>
+</ul>
+<h3>7. USB（Universal Serial Bus）</h3>
+<h4><strong>原理</strong></h4>
+<p>USB是一种广泛使用的串行通信标准，支持热插拔、多种传输速率和复杂协议。</p>
+<h4><strong>特点</strong></h4>
+<ul>
+<li><strong>热插拔</strong>：设备可随时连接或断开。</li>
+<li><strong>高速传输</strong>：USB 2.0（480 Mbps）、USB 3.0（5 Gbps）等。</li>
+<li><strong>多功能</strong>：支持数据传输、供电和设备管理。</li>
+</ul>
+<h4><strong>应用场景</strong></h4>
+<ul>
+<li>计算机与外设的连接，如键盘、鼠标、存储设备等。</li>
+<li>移动设备的充电和数据传输。</li>
+</ul>
+<h3>8. CAN（Controller Area Network）</h3>
+<h4><strong>原理</strong></h4>
+<p>CAN是一种多主通信协议，专为汽车和工业应用设计，使用差分信号进行数据传输。</p>
+<h4><strong>特点</strong></h4>
+<ul>
+<li><strong>高可靠性</strong>：适合恶劣环境，具有错误检测和恢复机制。</li>
+<li><strong>多主总线</strong>：支持多个设备同时访问总线。</li>
+<li><strong>速度</strong>：标准CAN（1 Mbps），高速CAN（更高速度）。</li>
+</ul>
+<h4><strong>应用场景</strong></h4>
+<ul>
+<li>汽车电子网络，如ECU通信。</li>
+<li>工业自动化控制系统。</li>
+</ul>
+<h3>9. TTL（Transistor-Transistor Logic）</h3>
+<h4><strong>原理</strong></h4>
+<p>TTL是指使用5V逻辑电平的串行通信，一般用来表示UART的逻辑电平标准。</p>
+<h4><strong>特点</strong></h4>
+<ul>
+<li><strong>逻辑电平</strong>：高电平5V，低电平0V。</li>
+<li><strong>简单</strong>：没有复杂的物理层标准。</li>
+</ul>
+<h4><strong>应用场景</strong></h4>
+<ul>
+<li>嵌入式系统的芯片间通信。</li>
+<li>用于TTL逻辑的电路。</li>
+</ul>
+<h3><strong>相互之间的关系</strong></h3>
+<ul>
+<li><strong>UART与RS-232</strong>：RS-232是UART的一种物理层实现，用于长距离通信和更高的电压电平。</li>
+<li><strong>USART与UART</strong>：USART包含了UART的功能，同时支持同步通信。</li>
+<li><strong>I²C与SPI</strong>：I²C和SPI都是短距离、芯片间通信协议。I²C适合多设备共享总线，SPI适合高速数据传输。</li>
+<li><strong>RS-485与RS-232</strong>：RS-485适用于多点和长距离通信，RS-232则适用于点对点短距离通信。</li>
+<li><strong>TTL与其他</strong>：TTL是逻辑电平标准，通常与UART结合使用来表示低电压的串行通信。</li>
+</ul>
+<h3><strong>总结</strong></h3>
+<ul>
+<li><strong>I²C</strong>：适合多设备、低速通信。</li>
+<li><strong>SPI</strong>：适合高速、全双工通信。</li>
+<li><strong>UART</strong>：适合简单、点对点通信。</li>
+<li><strong>USART</strong>：灵活，支持同步和异步通信。</li>
+<li><strong>RS-485</strong>：适合长距离、多点通信。</li>
+<li><strong>RS-232</strong>：适合短距离、点对点通信。</li>
+<li><strong>USB</strong>：适合高带宽、设备管理复杂场景。</li>
+<li><strong>CAN</strong>：适合高可靠性、多主通信需求。</li>
+<li><strong>TTL</strong>：指逻辑电平，用于低电压电路。</li>
+</ul>
+<p>这些通信协议和标准各有优势，适用于不同的应用场景和需求。在设计和实现通信系统时，选择合适的协议能确保系统的效率和可靠性。</p></div>
+<div style="font-size:small;margin-top:8px;float:right;"></div>
+<button class="btn btn-block" type="button" onclick="openComments()" id="cmButton">评论</button>
+<div class="comments" id="comments"></div>
+</div>
+    <div id="footer">Copyright © <span id="year"></span><a href="https://freelxw.github.io/tech-study.github.io"> ll's study </a>
+<p>
+<span id="runday"></span>Powered by <a href="https://meekdai.com/Gmeek.html" target="_blank">Gmeek</a>
+</p>
+
+<script>
+if(""!=""){
+    var now=new Date();
+    var startSite=new Date("");
+    var diff=now.getTime()-startSite.getTime();
+    var diffDay=Math.floor(diff/(1000*60*60*24));
+    document.getElementById("year").innerHTML=now.getFullYear();
+    if(""!=""){document.getElementById("runday").innerHTML=" • "+"网站运行"+diffDay+"天"+" • ";}
+    else{document.getElementById("runday").innerHTML="网站运行"+diffDay+"天"+" • ";}
+}
+</script>
+</div>
+</body>
+<script>
+var IconList={'sun': 'M8 10.5a2.5 2.5 0 100-5 2.5 2.5 0 000 5zM8 12a4 4 0 100-8 4 4 0 000 8zM8 0a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0V.75A.75.75 0 018 0zm0 13a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0v-1.5A.75.75 0 018 13zM2.343 2.343a.75.75 0 011.061 0l1.06 1.061a.75.75 0 01-1.06 1.06l-1.06-1.06a.75.75 0 010-1.06zm9.193 9.193a.75.75 0 011.06 0l1.061 1.06a.75.75 0 01-1.06 1.061l-1.061-1.06a.75.75 0 010-1.061zM16 8a.75.75 0 01-.75.75h-1.5a.75.75 0 010-1.5h1.5A.75.75 0 0116 8zM3 8a.75.75 0 01-.75.75H.75a.75.75 0 010-1.5h1.5A.75.75 0 013 8zm10.657-5.657a.75.75 0 010 1.061l-1.061 1.06a.75.75 0 11-1.06-1.06l1.06-1.06a.75.75 0 011.06 0zm-9.193 9.193a.75.75 0 010 1.06l-1.06 1.061a.75.75 0 11-1.061-1.06l1.06-1.061a.75.75 0 011.061 0z', 'moon': 'M9.598 1.591a.75.75 0 01.785-.175 7 7 0 11-8.967 8.967.75.75 0 01.961-.96 5.5 5.5 0 007.046-7.046.75.75 0 01.175-.786zm1.616 1.945a7 7 0 01-7.678 7.678 5.5 5.5 0 107.678-7.678z', 'sync': 'M1.705 8.005a.75.75 0 0 1 .834.656 5.5 5.5 0 0 0 9.592 2.97l-1.204-1.204a.25.25 0 0 1 .177-.427h3.646a.25.25 0 0 1 .25.25v3.646a.25.25 0 0 1-.427.177l-1.38-1.38A7.002 7.002 0 0 1 1.05 8.84a.75.75 0 0 1 .656-.834ZM8 2.5a5.487 5.487 0 0 0-4.131 1.869l1.204 1.204A.25.25 0 0 1 4.896 6H1.25A.25.25 0 0 1 1 5.75V2.104a.25.25 0 0 1 .427-.177l1.38 1.38A7.002 7.002 0 0 1 14.95 7.16a.75.75 0 0 1-1.49.178A5.5 5.5 0 0 0 8 2.5Z', 'home': 'M6.906.664a1.749 1.749 0 0 1 2.187 0l5.25 4.2c.415.332.657.835.657 1.367v7.019A1.75 1.75 0 0 1 13.25 15h-3.5a.75.75 0 0 1-.75-.75V9H7v5.25a.75.75 0 0 1-.75.75h-3.5A1.75 1.75 0 0 1 1 13.25V6.23c0-.531.242-1.034.657-1.366l5.25-4.2Zm1.25 1.171a.25.25 0 0 0-.312 0l-5.25 4.2a.25.25 0 0 0-.094.196v7.019c0 .138.112.25.25.25H5.5V8.25a.75.75 0 0 1 .75-.75h3.5a.75.75 0 0 1 .75.75v5.25h2.75a.25.25 0 0 0 .25-.25V6.23a.25.25 0 0 0-.094-.195Z', 'github': 'M8 0c4.42 0 8 3.58 8 8a8.013 8.013 0 0 1-5.45 7.59c-.4.08-.55-.17-.55-.38 0-.27.01-1.13.01-2.2 0-.75-.25-1.23-.54-1.48 1.78-.2 3.65-.88 3.65-3.95 0-.88-.31-1.59-.82-2.15.08-.2.36-1.02-.08-2.12 0 0-.67-.22-2.2.82-.64-.18-1.32-.27-2-.27-.68 0-1.36.09-2 .27-1.53-1.03-2.2-.82-2.2-.82-.44 1.1-.16 1.92-.08 2.12-.51.56-.82 1.28-.82 2.15 0 3.06 1.86 3.75 3.64 3.95-.23.2-.44.55-.51 1.07-.46.21-1.61.55-2.33-.66-.15-.24-.6-.83-1.23-.82-.67.01-.27.38.01.53.34.19.73.9.82 1.13.16.45.68 1.31 2.69.94 0 .67.01 1.3.01 1.49 0 .21-.15.45-.55.38A7.995 7.995 0 0 1 0 8c0-4.42 3.58-8 8-8Z'};
+var utterancesLoad=0;
+
+let themeSettings={
+    "dark": ["dark","moon","#00f0ff","dark-blue"],
+    "light": ["light","sun","#ff5000","github-light"],
+    "auto": ["auto","sync","","preferred-color-scheme"]
+};
+function changeTheme(mode, icon, color, utheme){
+    document.documentElement.setAttribute("data-color-mode",mode);
+    document.getElementById("themeSwitch").setAttribute("d",value=IconList[icon]);
+    document.getElementById("themeSwitch").parentNode.style.color=color;
+    if(utterancesLoad==1){utterancesTheme(utheme);}
+}
+function modeSwitch(){
+    let currentMode=document.documentElement.getAttribute('data-color-mode');
+    let newMode = currentMode === "light" ? "dark" : currentMode === "dark" ? "auto" : "light";
+    localStorage.setItem("meek_theme", newMode);
+    if(themeSettings[newMode]){
+        changeTheme(...themeSettings[newMode]);
+    }
+}
+function utterancesTheme(theme){
+    const message={type:'set-theme',theme: theme};
+    const iframe=document.getElementsByClassName('utterances-frame')[0];
+    iframe.contentWindow.postMessage(message,'https://utteranc.es');
+}
+if(themeSettings[theme]){changeTheme(...themeSettings[theme]);}
+console.log("\n %c Gmeek last https://github.com/Meekdai/Gmeek \n\n","padding:5px 0;background:#02d81d;color:#fff");
+</script>
+
+<script>
+document.getElementById("pathHome").setAttribute("d",IconList["home"]);
+document.getElementById("pathIssue").setAttribute("d",IconList["github"]);
+
+function openComments(){
+    cm=document.getElementById("comments");
+    cmButton=document.getElementById("cmButton");
+    cmButton.innerHTML="loading";
+    span=document.createElement("span");
+    span.setAttribute("class","AnimatedEllipsis");
+    cmButton.appendChild(span);
+
+    script=document.createElement("script");
+    script.setAttribute("src","https://utteranc.es/client.js");
+    script.setAttribute("repo","freelxw/tech-study.github.io");
+    script.setAttribute("issue-term","title");
+    
+    if(localStorage.getItem("meek_theme")=="dark"){script.setAttribute("theme","dark-blue");}
+    else if(localStorage.getItem("meek_theme")=="light") {script.setAttribute("theme","github-light");}
+    else{script.setAttribute("theme","preferred-color-scheme");}
+    
+    script.setAttribute("crossorigin","anonymous");
+    script.setAttribute("async","");
+    cm.appendChild(script);
+
+    int=self.setInterval("iFrameLoading()",200);
+}
+
+function iFrameLoading(){
+    var utterances=document.getElementsByClassName('utterances');
+    if(utterances.length==1){
+        if(utterances[0].style.height!=""){
+            utterancesLoad=1;
+            int=window.clearInterval(int);
+            document.getElementById("cmButton").style.display="none";
+            console.log("utterances Load OK");
+        }
+    }
+}
+</script>
+
+
+</html>
