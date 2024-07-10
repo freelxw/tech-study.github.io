@@ -303,9 +303,6 @@ body{box-sizing: border-box;min-width: 200px;max-width: 900px;margin: 20px auto;
 
 <span class="pl-en">END MyFunction</span></pre></div>
 <p>这个示例展示了如何使用<code class="notranslate">AREA</code>定义代码和数据段，使用<code class="notranslate">ENTRY</code>标记程序入口点，使用<code class="notranslate">EQU</code>定义常量，使用<code class="notranslate">EXPORT</code>和<code class="notranslate">IMPORT</code>声明符号，使用<code class="notranslate">LDR</code>和<code class="notranslate">BL</code>指令，使用<code class="notranslate">DCB</code>和<code class="notranslate">DCD</code>定义数据，以及使用<code class="notranslate">ALIGN</code>对齐数据。</p>
-<p>.text                          将定义符开始的代码编译到代码段<br>
-.data                         将定义符开始的代码编译到数据段<br>
-.end                         文件结束</p>
 <p>GNU汇编（GNU Assembler，简称GAS）支持一些伪指令（pseudo-operations），这些指令并不是处理器直接执行的指令，而是在汇编器（assembler）处理源代码时使用的指令，用于定义数据、分配存储空间、控制程序流程等。这些伪指令提供了方便和灵活性，可以简化汇编代码的编写和管理。以下是一些常见的GNU汇编伪指令及其用法：</p>
 <h3>1. 数据定义指令</h3>
 <h4>a. <code class="notranslate">.byte</code></h4>
