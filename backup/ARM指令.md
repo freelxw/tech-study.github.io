@@ -245,5 +245,110 @@ END MyFunction
 
 这个示例展示了如何使用`AREA`定义代码和数据段，使用`ENTRY`标记程序入口点，使用`EQU`定义常量，使用`EXPORT`和`IMPORT`声明符号，使用`LDR`和`BL`指令，使用`DCB`和`DCD`定义数据，以及使用`ALIGN`对齐数据。
 
+.text                          将定义符开始的代码编译到代码段
+.data                         将定义符开始的代码编译到数据段
+.end                         文件结束
+
+GNU汇编（GNU Assembler，简称GAS）支持一些伪指令（pseudo-operations），这些指令并不是处理器直接执行的指令，而是在汇编器（assembler）处理源代码时使用的指令，用于定义数据、分配存储空间、控制程序流程等。这些伪指令提供了方便和灵活性，可以简化汇编代码的编写和管理。以下是一些常见的GNU汇编伪指令及其用法：
+
+### 1. 数据定义指令
+
+#### a. `.byte`
+- **用途：** 定义一个或多个字节数据。
+- **语法：** `.byte byte1, byte2, ...`
+- **例子：**
+  ```assembly
+  .byte 0x41, 0x42, 0x43  ; 定义三个字节数据，分别为0x41, 0x42, 0x43
+  ```
+
+#### b. `.word`
+- **用途：** 定义一个或多个字（通常是4个字节）数据。
+- **语法：** `.word word1, word2, ...`
+- **例子：**
+  ```assembly
+  .word 0x12345678  ; 定义一个字数据为0x12345678
+  ```
+
+#### c. `.ascii` 和 `.asciz`
+- **用途：** 定义ASCII字符串。
+- **`.ascii`语法：** `.ascii "string"`
+- **`.asciz`语法：** `.asciz "string"`
+- **例子：**
+  ```assembly
+  .ascii "Hello"   ; 定义ASCII字符串"Hello"
+  .asciz "World"   ; 定义ASCII字符串"World"，并自动添加空字符('\0')
+  ```
+
+#### d. `.zero`
+- **用途：** 分配指定字节数的零初始化内存。
+- **语法：** `.zero size`
+- **例子：**
+  ```assembly
+  .zero 100  ; 分配100个字节的零初始化内存
+  ```
+
+### 2. 符号和标签指令
+
+#### a. `.equ`
+- **用途：** 定义一个符号常量。
+- **语法：** `.equ symbol, expression`
+- **例子：**
+  ```assembly
+  .equ MAX_SIZE, 100  ; 定义符号常量MAX_SIZE为100
+  ```
+
+#### b. `.global`
+- **用途：** 声明一个全局符号（函数或变量）。
+- **语法：** `.global symbol`
+- **例子：**
+  ```assembly
+  .global main  ; 声明main函数为全局符号
+  ```
+
+
+###c.`.text`                 
+-**用途:**  将定义符开始的代码编译到代码段.
+- **语法：** `.text`
+
+
+###c.`.data`                 
+-**用途:**  将定义符开始的代码编译到数据段
+- **语法：** `.data`
+
+
+###c.`.end`                 
+-**用途:**  文件结束
+- **语法：** `.end`
+
+
+### 3. 控制流指令
+
+#### a. `.if` 和 `.else`
+- **用途：** 条件编译，根据条件选择性地包含或排除一段代码。
+- **语法：**
+  ```assembly
+  .if condition
+      ; code block
+  .else
+      ; alternative code block
+  .endif
+  ```
+- **例子：**
+  ```assembly
+  .if DEBUG_MODE
+      mov r0, #1
+  .else
+      mov r0, #0
+  .endif
+  ```
+
+#### b. `.include`
+- **用途：** 包含另一个源文件中的内容。
+- **语法：** `.include "filename"`
+- **例子：**
+  ```assembly
+  .include "constants.s"  ; 包含constants.s文件中的内容
+  ```
+
 
 
