@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html data-color-mode="light" data-dark-theme="dark" data-light-theme="light" lang="zh-CN">
+<head>
+    <meta content="text/html; charset=utf-8" http-equiv="content-type" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link href='https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/Primer/21.0.7/primer.css' rel='stylesheet' />
+    <link rel="icon" href="https://github.githubassets.com/favicons/favicon.svg"><script>
+        let theme = localStorage.getItem("meek_theme") || "light";
+        document.documentElement.setAttribute("data-color-mode", theme);
+    </script>
+<meta name="description" content="ARM (Advanced RISC Machine) 处理器有几种主要的工作模式:
+
+1. 用户模式 (User Mode):
+   - 最低特权级别
+   - 大多数应用程序在此模式下运行
+   - 对系统资源的访问受限
+
+2. 系统模式 (System Mode):
+   - 高特权级别
+   - 通常用于操作系统任务
+   - 可以访问所有系统资源
+
+3. 管理模式 (Supervisor Mode):
+   - 介于用户模式和系统模式之间
+   - 用于某些操作系统功能和设备驱动程序
+
+4. 中断模式 (IRQ Mode):
+   - 处理硬件中断
+   - 快速响应外部事件
+
+5. 快速中断模式 (FIQ Mode):
+   - 用于高优先级中断
+   - 比普通中断模式更快
+
+6. 未定义指令模式 (Undefined Mode):
+   - 处理未知或非法指令
+
+7. 数据中止模式 (Data Abort Mode):
+   - 处理内存访问错误
+
+8. 预取中止模式 (Prefetch Abort Mode):
+   - 处理指令预取错误
+
+这些模式允许ARM处理器有效地管理系统资源、处理异常和中断,以及实现不同级别的系统安全。">
+<meta property="og:title" content="ARM基础">
+<meta property="og:description" content="ARM (Advanced RISC Machine) 处理器有几种主要的工作模式:
+
+1. 用户模式 (User Mode):
+   - 最低特权级别
+   - 大多数应用程序在此模式下运行
+   - 对系统资源的访问受限
+
+2. 系统模式 (System Mode):
+   - 高特权级别
+   - 通常用于操作系统任务
+   - 可以访问所有系统资源
+
+3. 管理模式 (Supervisor Mode):
+   - 介于用户模式和系统模式之间
+   - 用于某些操作系统功能和设备驱动程序
+
+4. 中断模式 (IRQ Mode):
+   - 处理硬件中断
+   - 快速响应外部事件
+
+5. 快速中断模式 (FIQ Mode):
+   - 用于高优先级中断
+   - 比普通中断模式更快
+
+6. 未定义指令模式 (Undefined Mode):
+   - 处理未知或非法指令
+
+7. 数据中止模式 (Data Abort Mode):
+   - 处理内存访问错误
+
+8. 预取中止模式 (Prefetch Abort Mode):
+   - 处理指令预取错误
+
+这些模式允许ARM处理器有效地管理系统资源、处理异常和中断,以及实现不同级别的系统安全。">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://freelxw.github.io/tech-study.github.io/post/ARM-ji-chu.html">
+<meta property="og:image" content="https://github.githubassets.com/favicons/favicon.svg">
+<title>ARM基础</title>
+
+
+</head>
+<style>
+body{box-sizing: border-box;min-width: 200px;max-width: 900px;margin: 20px auto;padding: 45px;font-size: 16px;font-family: sans-serif;line-height: 1.25;}
+#header{display:flex;padding-bottom:8px;border-bottom: 1px solid var(--borderColor-muted, var(--color-border-muted));margin-bottom: 16px;}
+#footer {margin-top:64px; text-align: center;font-size: small;}
+
+</style>
+
+<style>
+.postTitle{margin: auto 0;font-size:40px;font-weight:bold;}
+.title-right{display:flex;margin:auto 0 0 auto;}
+.title-right .circle{padding: 14px 16px;margin-right:8px;}
+#postBody{border-bottom: 1px solid var(--color-border-default);padding-bottom:36px;}
+#postBody hr{height:2px;}
+#cmButton{height:48px;margin-top:48px;}
+#comments{margin-top:64px;}
+.g-emoji{font-size:24px;}
+@media (max-width: 600px) {
+    body {padding: 8px;}
+    .postTitle{font-size:24px;}
+}
+</style>
+
+
+
+
+<body>
+    <div id="header">
+<h1 class="postTitle">ARM基础</h1>
+<div class="title-right">
+    <a href="https://freelxw.github.io/tech-study.github.io" id="buttonHome" class="btn btn-invisible circle" title="首页">
+        <svg class="octicon" width="16" height="16">
+            <path id="pathHome" fill-rule="evenodd"></path>
+        </svg>
+    </a>
+    
+    <a href="https://github.com/freelxw/tech-study.github.io/issues/16" target="_blank" class="btn btn-invisible circle" title="Issue">
+        <svg class="octicon" width="16" height="16">
+            <path id="pathIssue" fill-rule="evenodd"></path>
+        </svg>
+    </a>
+    
+
+    <a class="btn btn-invisible circle" onclick="modeSwitch();" title="切换主题">
+        <svg class="octicon" width="16" height="16" >
+            <path id="themeSwitch" fill-rule="evenodd"></path>
+        </svg>
+    </a>
+
+</div>
+</div>
+    <div id="content">
+<div class="markdown-body" id="postBody"><p>ARM (Advanced RISC Machine) 处理器有几种主要的工作模式:</p>
+<ol>
+<li>
+<p>用户模式 (User Mode):</p>
+<ul>
+<li>最低特权级别</li>
+<li>大多数应用程序在此模式下运行</li>
+<li>对系统资源的访问受限</li>
+</ul>
+</li>
+<li>
+<p>系统模式 (System Mode):</p>
+<ul>
+<li>高特权级别</li>
+<li>通常用于操作系统任务</li>
+<li>可以访问所有系统资源</li>
+</ul>
+</li>
+<li>
+<p>管理模式 (Supervisor Mode):</p>
+<ul>
+<li>介于用户模式和系统模式之间</li>
+<li>用于某些操作系统功能和设备驱动程序</li>
+</ul>
+</li>
+<li>
+<p>中断模式 (IRQ Mode):</p>
+<ul>
+<li>处理硬件中断</li>
+<li>快速响应外部事件</li>
+</ul>
+</li>
+<li>
+<p>快速中断模式 (FIQ Mode):</p>
+<ul>
+<li>用于高优先级中断</li>
+<li>比普通中断模式更快</li>
+</ul>
+</li>
+<li>
+<p>未定义指令模式 (Undefined Mode):</p>
+<ul>
+<li>处理未知或非法指令</li>
+</ul>
+</li>
+<li>
+<p>数据中止模式 (Data Abort Mode):</p>
+<ul>
+<li>处理内存访问错误</li>
+</ul>
+</li>
+<li>
+<p>预取中止模式 (Prefetch Abort Mode):</p>
+<ul>
+<li>处理指令预取错误</li>
+</ul>
+</li>
+</ol>
+<p>这些模式允许ARM处理器有效地管理系统资源、处理异常和中断,以及实现不同级别的系统安全。不同模式有不同的寄存器集和访问权限,使得操作系统能够实现必要的保护和隔离。</p>
+<p>ARM处理器使用多种寄存器来进行数据处理和控制。以下是ARM处理器中主要的寄存器类型：</p>
+<ol>
+<li>
+<p>通用寄存器 (General-Purpose Registers):</p>
+<ul>
+<li>R0 到 R15，共16个32位寄存器</li>
+<li>R13 通常用作栈指针 (SP)</li>
+<li>R14 是链接寄存器 (LR)，用于存储子程序返回地址</li>
+<li>R15 是程序计数器 (PC)</li>
+</ul>
+</li>
+<li>
+<p>程序状态寄存器 (Program Status Registers):</p>
+<ul>
+<li>CPSR (Current Program Status Register)：存储当前程序状态</li>
+<li>SPSR (Saved Program Status Register)：在模式切换时保存CPSR的副本</li>
+</ul>
+</li>
+<li>
+<p>浮点寄存器 (在支持浮点运算的ARM处理器中):</p>
+<ul>
+<li>32个单精度或双精度浮点寄存器</li>
+</ul>
+</li>
+<li>
+<p>向量寄存器 (在支持NEON指令集的处理器中):</p>
+<ul>
+<li>用于SIMD (单指令多数据) 操作</li>
+</ul>
+</li>
+<li>
+<p>系统控制寄存器:</p>
+<ul>
+<li>用于控制处理器的各种功能，如缓存、MMU等</li>
+</ul>
+</li>
+<li>
+<p>调试寄存器:</p>
+<ul>
+<li>用于调试和跟踪程序执行</li>
+</ul>
+</li>
+<li>
+<p>协处理器寄存器:</p>
+<ul>
+<li>用于扩展ARM处理器的功能</li>
+</ul>
+</li>
+</ol>
+<p>每种工作模式可能会有自己特定的寄存器集，尤其是对于R13 (SP)和R14 (LR)。这种设计允许快速的上下文切换和异常处理。</p>
+<p>CPSR寄存器尤其重要，它包含：</p>
+<ul>
+<li>条件标志（零、负、进位、溢出）</li>
+<li>中断禁用位</li>
+<li>当前处理器模式</li>
+<li>其他状态和控制位</li>
+</ul>
+<p>Thumb指令集和ARM指令集是ARM架构中两种不同的指令编码方式，它们有以下主要区别：</p>
+<ol>
+<li>
+<p>指令长度：</p>
+<ul>
+<li>ARM指令：固定32位长</li>
+<li>Thumb指令：主要是16位，部分扩展指令（Thumb-2）为32位</li>
+</ul>
+</li>
+<li>
+<p>指令密度：</p>
+<ul>
+<li>Thumb指令通常比ARM指令具有更高的代码密度，可以减少程序占用的存储空间</li>
+</ul>
+</li>
+<li>
+<p>性能：</p>
+<ul>
+<li>ARM指令通常能提供更高的性能，因为它们可以在一条指令中完成更复杂的操作</li>
+<li>Thumb指令可能需要多条指令来完成同样的操作，但在某些情况下可能因为更好的缓存利用率而表现更好</li>
+</ul>
+</li>
+<li>
+<p>寄存器使用：</p>
+<ul>
+<li>ARM指令可以访问所有16个通用寄存器</li>
+<li>基本Thumb指令只能直接访问低8个寄存器（R0-R7），但Thumb-2扩展了这一限制</li>
+</ul>
+</li>
+<li>
+<p>功能覆盖：</p>
+<ul>
+<li>ARM指令集提供了更全面的功能</li>
+<li>Thumb指令集设计为ARM指令集的子集，覆盖最常用的操作</li>
+</ul>
+</li>
+<li>
+<p>条件执行：</p>
+<ul>
+<li>ARM指令支持几乎所有指令的条件执行</li>
+<li>基本Thumb指令只有有限的条件执行支持，但Thumb-2扩展了这一功能</li>
+</ul>
+</li>
+<li>
+<p>切换模式：</p>
+<ul>
+<li>处理器可以在ARM和Thumb模式之间切换</li>
+<li>通常使用BX（分支并交换）或BLX（分支、链接并交换）指令进行切换</li>
+</ul>
+</li>
+<li>
+<p>使用场景：</p>
+<ul>
+<li>ARM模式通常用于性能关键的代码段</li>
+<li>Thumb模式常用于嵌入式系统，以节省存储空间和提高代码密度</li>
+</ul>
+</li>
+<li>
+<p>编译器支持：</p>
+<ul>
+<li>现代编译器能够自动选择使用ARM或Thumb指令，以优化性能和代码大小</li>
+</ul>
+</li>
+<li>
+<p>兼容性：</p>
+<ul>
+<li>所有支持Thumb的处理器也支持ARM指令集，但并非所有ARM处理器都支持Thumb指令集</li>
+</ul>
+</li>
+</ol>
+<p>需要注意的是，随着Thumb-2技术的引入，Thumb指令集的功能得到了显著扩展，缩小了与ARM指令集的差距。</p></div>
+<div style="font-size:small;margin-top:8px;float:right;"></div>
+
+<button class="btn btn-block" type="button" onclick="openComments()" id="cmButton">评论</button>
+<div class="comments" id="comments"></div>
+
+</div>
+    <div id="footer">Copyright © <span id="year"></span><a href="https://freelxw.github.io/tech-study.github.io"> ll's blogs </a>
+<p>
+<span id="runday"></span>Powered by <a href="https://meekdai.com/Gmeek.html" target="_blank">Gmeek</a>
+</p>
+
+<script>
+if(""!=""){
+    var now=new Date();
+    var startSite=new Date("");
+    var diff=now.getTime()-startSite.getTime();
+    var diffDay=Math.floor(diff/(1000*60*60*24));
+    document.getElementById("year").innerHTML=now.getFullYear();
+    if(""!=""){document.getElementById("runday").innerHTML=" • "+"网站运行"+diffDay+"天"+" • ";}
+    else{document.getElementById("runday").innerHTML="网站运行"+diffDay+"天"+" • ";}
+}
+</script>
+</div>
+</body>
+<script>
+var IconList={'sun': 'M8 10.5a2.5 2.5 0 100-5 2.5 2.5 0 000 5zM8 12a4 4 0 100-8 4 4 0 000 8zM8 0a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0V.75A.75.75 0 018 0zm0 13a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0v-1.5A.75.75 0 018 13zM2.343 2.343a.75.75 0 011.061 0l1.06 1.061a.75.75 0 01-1.06 1.06l-1.06-1.06a.75.75 0 010-1.06zm9.193 9.193a.75.75 0 011.06 0l1.061 1.06a.75.75 0 01-1.06 1.061l-1.061-1.06a.75.75 0 010-1.061zM16 8a.75.75 0 01-.75.75h-1.5a.75.75 0 010-1.5h1.5A.75.75 0 0116 8zM3 8a.75.75 0 01-.75.75H.75a.75.75 0 010-1.5h1.5A.75.75 0 013 8zm10.657-5.657a.75.75 0 010 1.061l-1.061 1.06a.75.75 0 11-1.06-1.06l1.06-1.06a.75.75 0 011.06 0zm-9.193 9.193a.75.75 0 010 1.06l-1.06 1.061a.75.75 0 11-1.061-1.06l1.06-1.061a.75.75 0 011.061 0z', 'moon': 'M9.598 1.591a.75.75 0 01.785-.175 7 7 0 11-8.967 8.967.75.75 0 01.961-.96 5.5 5.5 0 007.046-7.046.75.75 0 01.175-.786zm1.616 1.945a7 7 0 01-7.678 7.678 5.5 5.5 0 107.678-7.678z', 'sync': 'M1.705 8.005a.75.75 0 0 1 .834.656 5.5 5.5 0 0 0 9.592 2.97l-1.204-1.204a.25.25 0 0 1 .177-.427h3.646a.25.25 0 0 1 .25.25v3.646a.25.25 0 0 1-.427.177l-1.38-1.38A7.002 7.002 0 0 1 1.05 8.84a.75.75 0 0 1 .656-.834ZM8 2.5a5.487 5.487 0 0 0-4.131 1.869l1.204 1.204A.25.25 0 0 1 4.896 6H1.25A.25.25 0 0 1 1 5.75V2.104a.25.25 0 0 1 .427-.177l1.38 1.38A7.002 7.002 0 0 1 14.95 7.16a.75.75 0 0 1-1.49.178A5.5 5.5 0 0 0 8 2.5Z', 'home': 'M6.906.664a1.749 1.749 0 0 1 2.187 0l5.25 4.2c.415.332.657.835.657 1.367v7.019A1.75 1.75 0 0 1 13.25 15h-3.5a.75.75 0 0 1-.75-.75V9H7v5.25a.75.75 0 0 1-.75.75h-3.5A1.75 1.75 0 0 1 1 13.25V6.23c0-.531.242-1.034.657-1.366l5.25-4.2Zm1.25 1.171a.25.25 0 0 0-.312 0l-5.25 4.2a.25.25 0 0 0-.094.196v7.019c0 .138.112.25.25.25H5.5V8.25a.75.75 0 0 1 .75-.75h3.5a.75.75 0 0 1 .75.75v5.25h2.75a.25.25 0 0 0 .25-.25V6.23a.25.25 0 0 0-.094-.195Z', 'github': 'M8 0c4.42 0 8 3.58 8 8a8.013 8.013 0 0 1-5.45 7.59c-.4.08-.55-.17-.55-.38 0-.27.01-1.13.01-2.2 0-.75-.25-1.23-.54-1.48 1.78-.2 3.65-.88 3.65-3.95 0-.88-.31-1.59-.82-2.15.08-.2.36-1.02-.08-2.12 0 0-.67-.22-2.2.82-.64-.18-1.32-.27-2-.27-.68 0-1.36.09-2 .27-1.53-1.03-2.2-.82-2.2-.82-.44 1.1-.16 1.92-.08 2.12-.51.56-.82 1.28-.82 2.15 0 3.06 1.86 3.75 3.64 3.95-.23.2-.44.55-.51 1.07-.46.21-1.61.55-2.33-.66-.15-.24-.6-.83-1.23-.82-.67.01-.27.38.01.53.34.19.73.9.82 1.13.16.45.68 1.31 2.69.94 0 .67.01 1.3.01 1.49 0 .21-.15.45-.55.38A7.995 7.995 0 0 1 0 8c0-4.42 3.58-8 8-8Z'};
+var utterancesLoad=0;
+
+let themeSettings={
+    "dark": ["dark","moon","#00f0ff","dark-blue"],
+    "light": ["light","sun","#ff5000","github-light"],
+    "auto": ["auto","sync","","preferred-color-scheme"]
+};
+function changeTheme(mode, icon, color, utheme){
+    document.documentElement.setAttribute("data-color-mode",mode);
+    document.getElementById("themeSwitch").setAttribute("d",value=IconList[icon]);
+    document.getElementById("themeSwitch").parentNode.style.color=color;
+    if(utterancesLoad==1){utterancesTheme(utheme);}
+}
+function modeSwitch(){
+    let currentMode=document.documentElement.getAttribute('data-color-mode');
+    let newMode = currentMode === "light" ? "dark" : currentMode === "dark" ? "auto" : "light";
+    localStorage.setItem("meek_theme", newMode);
+    if(themeSettings[newMode]){
+        changeTheme(...themeSettings[newMode]);
+    }
+}
+function utterancesTheme(theme){
+    const message={type:'set-theme',theme: theme};
+    const iframe=document.getElementsByClassName('utterances-frame')[0];
+    iframe.contentWindow.postMessage(message,'https://utteranc.es');
+}
+if(themeSettings[theme]){changeTheme(...themeSettings[theme]);}
+console.log("\n %c Gmeek last https://github.com/Meekdai/Gmeek \n\n","padding:5px 0;background:#02d81d;color:#fff");
+</script>
+
+<script>
+document.getElementById("pathHome").setAttribute("d",IconList["home"]);
+document.getElementById("pathIssue").setAttribute("d",IconList["github"]);
+
+
+
+function openComments(){
+    cm=document.getElementById("comments");
+    cmButton=document.getElementById("cmButton");
+    cmButton.innerHTML="loading";
+    span=document.createElement("span");
+    span.setAttribute("class","AnimatedEllipsis");
+    cmButton.appendChild(span);
+
+    script=document.createElement("script");
+    script.setAttribute("src","https://utteranc.es/client.js");
+    script.setAttribute("repo","freelxw/tech-study.github.io");
+    script.setAttribute("issue-term","title");
+    
+    if(localStorage.getItem("meek_theme")=="dark"){script.setAttribute("theme","dark-blue");}
+    else if(localStorage.getItem("meek_theme")=="light") {script.setAttribute("theme","github-light");}
+    else{script.setAttribute("theme","preferred-color-scheme");}
+    
+    script.setAttribute("crossorigin","anonymous");
+    script.setAttribute("async","");
+    cm.appendChild(script);
+
+    int=self.setInterval("iFrameLoading()",200);
+}
+
+function iFrameLoading(){
+    var utterances=document.getElementsByClassName('utterances');
+    if(utterances.length==1){
+        if(utterances[0].style.height!=""){
+            utterancesLoad=1;
+            int=window.clearInterval(int);
+            document.getElementById("cmButton").style.display="none";
+            console.log("utterances Load OK");
+        }
+    }
+}
+</script>
+
+
+</html>
