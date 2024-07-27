@@ -199,33 +199,7 @@ body{box-sizing: border-box;min-width: 200px;max-width: 900px;margin: 20px auto;
 <li><strong>提升压缩率</strong>：AAC利用更先进的心理声学模型，在相同比特率下提供更高音质。</li>
 <li><strong>联合立体声编码</strong>：减少立体声信号的冗余。</li>
 </ul>
-<hr>
-<h2>视频有损编码去除的具体因素</h2>
-<h3>1. <strong>空间冗余（Spatial Redundancy）</strong></h3>
-<ul>
-<li><strong>原理</strong>：图像中的相邻像素往往具有相似性。</li>
-<li><strong>实现</strong>：利用空域压缩技术，如离散余弦变换（DCT）和小波变换，去除相邻像素间的冗余信息。</li>
-</ul>
-<h3>2. <strong>时间冗余（Temporal Redundancy）</strong></h3>
-<ul>
-<li><strong>原理</strong>：视频帧之间存在时间上的相似性，尤其是静止或变化缓慢的场景。</li>
-<li><strong>实现</strong>：使用帧间预测技术，只记录帧与帧之间的变化部分，如运动补偿技术（Motion Compensation）。</li>
-</ul>
-<h3>3. <strong>颜色冗余（Color Redundancy）</strong></h3>
-<ul>
-<li><strong>原理</strong>：人眼对颜色变化不如对亮度变化敏感。</li>
-<li><strong>实现</strong>：将RGB颜色空间转换为YUV颜色空间，对U和V分量进行下采样（Chroma Subsampling），如4:2:0格式。</li>
-</ul>
-<h3>4. <strong>视觉掩蔽（Visual Masking）</strong></h3>
-<ul>
-<li><strong>原理</strong>：人眼对高速移动的物体和低对比度细节不敏感。</li>
-<li><strong>实现</strong>：对快速运动场景和低对比度细节区域使用较低的比特率编码。</li>
-</ul>
-<h3>5. <strong>量化噪声（Quantization Noise）</strong></h3>
-<ul>
-<li><strong>原理</strong>：在量化过程中，高频细节被简化为量化噪声，人眼对这种噪声不敏感。</li>
-<li><strong>实现</strong>：在DCT系数量化时，更大程度地压缩高频分量。</li>
-</ul></div>
+<hr></div>
 <div style="font-size:small;margin-top:8px;float:right;"></div>
 
 <button class="btn btn-block" type="button" onclick="openComments()" id="cmButton">评论</button>
